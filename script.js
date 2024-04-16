@@ -5,9 +5,17 @@ let onDuty = [];
 
 function recordAttendance(type) {
     if (type === "Leave") {
+        if (leave.length > 0) {
+            updateMessage("You have already entered leave information. Please clear it before entering new information.");
+            return;
+        }
         document.getElementById("leave-input").style.display = "block";
         document.getElementById("on-duty-input").style.display = "none";
     } else if (type === "On-duty") {
+        if (onDuty.length > 0) {
+            updateMessage("You have already entered on-duty information. Please clear it before entering new information.");
+            return;
+        }
         document.getElementById("on-duty-input").style.display = "block";
         document.getElementById("leave-input").style.display = "none";
     }
@@ -17,20 +25,37 @@ function recordAttendance(type) {
 function recordLeave() {
     const input = document.getElementById("leave-input-field").value;
     const indices = input.split(" ").map(Number);
-    leave = indices.filter(index => index >= 0 && index < studentNames.length);
+    leave = indices.filter(index => index >= 0 && index < studentNames.length && !onDuty.includes(index));
     updateMessage(`Leave recorded for indices: ${leave.join(", ")}`);
     document.getElementById("leave-input").style.display = "none";
-     // Call printAttendance after updating leave
+    // Call printAttendance after updating leave
 }
 
 function recordOnDuty() {
     const input = document.getElementById("on-duty-input-field").value;
     const indices = input.split(" ").map(Number);
-    onDuty = indices.filter(index => index >= 0 && index < studentNames.length);
+    onDuty = indices.filter(index => index >= 0 && index < studentNames.length && !leave.includes(index));
     updateMessage(`On Duty recorded for indices: ${onDuty.join(", ")}`);
-    document.getElementById("on-duty-input").style.display = "none";  
+    document.getElementById("on-duty-input").style.display = "none";
 }
+// ... Previous code ...
 
+// Add a function to toggle the help text
+function toggleHelp() {
+    const helpText = document.getElementById("help-text");
+    const leaveInput = document.getElementById("leave-input");
+    const onDutyInput = document.getElementById("on-duty-input");
+  
+    if (helpText.style.display === "none") {
+      helpText.style.display = "block";
+      leaveInput.style.display = "none";
+      onDutyInput.style.display = "none";
+    } else {
+      helpText.style.display = "none";
+    }
+  }
+  
+  // ... Previous code ...
 function printAttendance() {
     const presentCount = studentNames.length-1 - leave.length;
     const absentCount = leave.length;
@@ -54,7 +79,7 @@ Absentees:
     report += "\nOn-duty Students:\n";
     for (let i = 0; i < onDuty.length; i++) {
         const index = onDuty[i];
-        report += `\t${i + 1}. ${studentNames[index]}\n`;
+        report += `\t${i+ 1}. ${studentNames[index]}\n`;
     }
 
     report += `
@@ -80,3 +105,55 @@ function shareOnWhatsApp() {
     const whatsappURL = `https://wa.me/?text=${encodeURIComponent(reportText)}`;
     window.open(whatsappURL, "_blank");
 }
+
+// Add a function to check if the input is valid
+function isValidInput(input, type) {
+    const indices = input.split(" ").map(Number);
+    const uniqueIndices = new Set(indices);
+    if (type === "Leave") {
+        return indices.length === uniqueIndices.size && indices.every(index => index >= 0 && index < studentNames.length && !onDuty.includes(index));
+    } else if (type === "On-duty") {
+        return indices.length === uniqueIndices.size && indices.every(index => index >= 0 && index < studentNames.length && !leave.includes(index));
+    }
+}
+
+// Add a function to display an error message if the input is invalid
+function showErrorMessage(input, type) {
+    let message = "";
+    if (input.length === 0) {
+        message = "Please enter a valid input.";
+    } else if (!isValidInput(input, type)) {
+        message = "The input contains invalid indices. Please re-enter the input.";
+    } else if (input.split(" ").length > studentNames.length) {
+        message = "The number of indices exceeds the total number of students. Please re-enter the input.";
+    }
+    updateMessage(message);
+}
+
+// Modify the recordLeave and recordOnDuty functions to check for valid input
+function recordLeave() {
+    const input = document.getElementById("leave-input-field").value;
+    if (isValidInput(input, "Leave")) {
+        leave = input.split(" ").map(Number);
+        updateMessage(`Leave recorded for indices: ${leave.join(", ")}`);
+        document.getElementById("leave-input").style.display = "none";
+        printAttendance();
+    } else {
+        showErrorMessage(input, "Leave");
+    }
+}
+
+function recordOnDuty() {
+    const input = document.getElementById("on-duty-input-field").value;
+    if (isValidInput(input, "On-duty")) {
+        onDuty = input.split(" ").map(Number);
+        updateMessage(`On Duty recorded for indices: ${onDuty.join(", ")}`);
+        document.getElementById("on-duty-input").style.display = "none";
+        printAttendance();
+    } else {
+        showErrorMessage(input, "On-duty");
+    }
+}// ... Previous code ...
+
+
+  // ... Previous code ...

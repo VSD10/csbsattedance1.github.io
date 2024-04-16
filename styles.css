@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
-  background-image: radial-gradient(circle 513px at 52.1% 52.6%, rgba(240,241,163,1) 0%, rgba(236,135,135,1) 90%);
+  background-image: radial-gradient(circle 513px at 52.1% 52.6%, rgb(138, 118, 229) 0%, rgb(28, 128, 105) 90%);
   animation: fadeIn 1s ease-in-out;
 }
 

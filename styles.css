@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
-  background-image: radial-gradient(circle 513px at 52.1% 52.6%, rgb(138, 118, 229) 0%, rgb(28, 128, 105) 90%);
+  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(100,43,115,1) 0%, rgba(4,0,4,1) 90% );
   animation: fadeIn 1s ease-in-out;
 }
 
@@ -71,7 +71,7 @@ input[type="text"]:focus {
 .action-buttons {
   text-align: center;
   margin-top: 20px;
-  margin-bottom: 400px;
+  margin-bottom: 20px;
   animation: slideInUp 1s ease-in-out;
 }
 

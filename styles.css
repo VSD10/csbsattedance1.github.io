@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
-  background: #0C2340;
+  background-image: linear-gradient(to right, #f83600 0%, #f9d423 100%);
    animation: fadeIn 1s ease-in-out;
 }
 

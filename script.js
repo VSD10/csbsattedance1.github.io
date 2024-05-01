@@ -101,7 +101,7 @@ function recordOnDuty() {
 function recordLateComers() {
     const input = document.getElementById("LateComers-input-field").value;
     const indices = input.split(" ").map(Number);
-    Late = indices.filter;
+    Late = indices;
     updateMessage(`Late Comers recorded for indices: ${Late.join(", ")}`);
     document.getElementById("LateComers-input").style.display = "none";
 }
